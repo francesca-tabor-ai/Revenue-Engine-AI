@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1771784327661,
+      "tag": "0000_graceful_randall_flagg",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1771784758944,
+      "tag": "0001_grey_emma_frost",
+      "breakpoints": true
+    }
+  ]
+}
