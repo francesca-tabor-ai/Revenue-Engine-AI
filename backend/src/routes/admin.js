@@ -104,11 +104,11 @@ const userCrud = {
   },
   create: async (req, res) => {
     const bcrypt = (await import('bcryptjs')).default
-    const { password, ...rest } = req.body
+    const { password, id, createdAt, updatedAt, ...rest } = req.body
     if (!password) return res.status(400).json({ error: 'Password required' })
     const passwordHash = await bcrypt.hash(password, 10)
     const user = await prisma.user.create({
-      data: { ...rest, passwordHash },
+      data: { ...rest, passwordHash, role: rest.role || 'USER' },
       select: { id: true, email: true, firstName: true, lastName: true, role: true, organizationId: true, createdAt: true, updatedAt: true },
     })
     res.status(201).json(user)

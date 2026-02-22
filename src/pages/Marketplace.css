@@ -146,6 +146,80 @@
   flex-wrap: wrap;
 }
 
+.marketplace-detail-page {
+  padding-top: 2rem;
+}
+
+.marketplace-detail {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.app-detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+.app-detail-header {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.app-detail-icon {
+  font-size: 3rem;
+}
+
+.app-detail-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  margin: 0.25rem 0 0;
+}
+
+.app-detail-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+}
+
+.app-detail-description {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.app-detail-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.app-detail-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.back-link {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--accent-cyan);
+}
+
 @media (max-width: 768px) {
   .apps-grid {
     grid-template-columns: 1fr;

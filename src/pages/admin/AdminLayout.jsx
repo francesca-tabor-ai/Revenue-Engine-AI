@@ -30,9 +30,20 @@ function getApiPath(path) {
 }
 
 export default function AdminLayout() {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isAdmin, loading } = useAuth()
   const navigate = useNavigate()
 
+  if (loading) {
+    return (
+      <div className="admin-forbidden">
+        <div className="admin-loading">Loading...</div>
+      </div>
+    )
+  }
+  if (!user) {
+    navigate('/login', { replace: true })
+    return null
+  }
   if (!isAdmin) {
     return (
       <div className="admin-forbidden">

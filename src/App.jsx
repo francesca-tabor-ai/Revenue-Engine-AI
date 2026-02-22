@@ -14,7 +14,11 @@ import AdminHome from './pages/admin/AdminHome'
 import AdminEntity from './pages/admin/AdminEntity'
 import ApiDocs from './pages/ApiDocs'
 import Marketplace from './pages/Marketplace'
+import MarketplaceAppDetail from './pages/MarketplaceAppDetail'
 import BuildApp from './pages/BuildApp'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
+import NotFound from './pages/NotFound'
 
 function RequireAuth({ children }) {
   const token = localStorage.getItem('token')
@@ -53,6 +57,10 @@ function App() {
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/marketplace" element={<Marketplace />} />
                   <Route path="/marketplace/build" element={<BuildApp />} />
+                  <Route path="/marketplace/:id" element={<MarketplaceAppDetail />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
               <Footer />

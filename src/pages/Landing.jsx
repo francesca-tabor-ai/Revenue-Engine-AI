@@ -83,7 +83,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* How We Solve It */}
+      {/* How We Solve It / Features */}
       <section className="solution-section" id="how-it-works">
         <h2 className="section-title">How we solve it</h2>
         <p className="section-subtitle">Purpose-built for revenue. One platform. Actionable insights. No rip-and-replace.</p>

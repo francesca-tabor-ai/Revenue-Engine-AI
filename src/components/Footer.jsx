@@ -15,7 +15,7 @@ export default function Footer() {
             <Link to="/pricing">Pricing</Link>
             <Link to="/case-studies">Case Studies</Link>
             <Link to="/api-docs">API Docs</Link>
-            <a href="/#features">Features</a>
+            <Link to="/#how-it-works">Features</Link>
           </div>
           <div>
             <h4>Developers</h4>
@@ -31,8 +31,8 @@ export default function Footer() {
           </div>
           <div>
             <h4>Legal</h4>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/terms">Terms</Link>
           </div>
         </div>
       </div>
