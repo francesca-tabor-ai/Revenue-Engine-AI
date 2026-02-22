@@ -44,6 +44,17 @@ button {
   cursor: pointer;
 }
 
+/* Shared button sizes */
+.btn-lg {
+  padding: 0.9rem 1.75rem;
+  font-size: 1rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .app {
   min-height: 100vh;
   display: flex;

@@ -9,6 +9,9 @@ dist
 .env.local
 .env.*.local
 
+# Credentials (contains demo passwords)
+ADMIN_CREDENTIALS.md
+
 # IDE
 .idea
 .vscode

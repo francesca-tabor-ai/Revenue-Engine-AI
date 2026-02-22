@@ -1,0 +1,282 @@
+// Revenue Engine AI - PostgreSQL Schema
+// Railway + Prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ AUTH & USERS ============
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  firstName     String?   @map("first_name")
+  lastName      String?   @map("last_name")
+  role          UserRole  @default(USER)
+  organizationId String?  @map("organization_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  auditLogs      AuditLog[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// ============ ORGANIZATIONS & SUBSCRIPTIONS ============
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  plan        Plan     @default(INDIVIDUAL)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  users         User[]
+  accounts      Account[]
+  leads         Lead[]
+  deals        Deal[]
+  contacts     Contact[]
+  pipelineStages PipelineStage[]
+  crmConnections CrmConnection[]
+  playbooks    Playbook[]
+  integrations Integration[]
+  forecasts    Forecast[]
+  settings     Setting[]
+
+  @@map("organizations")
+}
+
+enum Plan {
+  INDIVIDUAL
+  TEAM
+  ENTERPRISE
+}
+
+// ============ CRM & REVENUE DATA ============
+model Account {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  name           String
+  domain         String?
+  industry       String?
+  revenue        Decimal? @db.Decimal(15, 2)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contacts     Contact[]
+  deals        Deal[]
+  leads        Lead[]
+
+  @@map("accounts")
+}
+
+model Contact {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  accountId      String?  @map("account_id")
+  email          String
+  firstName      String?  @map("first_name")
+  lastName       String?  @map("last_name")
+  title          String?
+  phone          String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account?     @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  leads        Lead[]
+  deals        Deal[]
+
+  @@map("contacts")
+}
+
+model Lead {
+  id             String     @id @default(cuid())
+  organizationId String     @map("organization_id")
+  accountId      String?    @map("account_id")
+  contactId      String?    @map("contact_id")
+  email          String
+  firstName      String?    @map("first_name")
+  lastName       String?    @map("last_name")
+  source         String?
+  score          Int?       @default(0)
+  status        LeadStatus @default(NEW)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account      Account?     @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  contact      Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@map("leads")
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  DISQUALIFIED
+  CONVERTED
+}
+
+model Deal {
+  id             String     @id @default(cuid())
+  organizationId String     @map("organization_id")
+  accountId      String?    @map("account_id")
+  contactId      String?    @map("contact_id")
+  stageId        String?    @map("stage_id")
+  name           String
+  value         Decimal    @db.Decimal(15, 2)
+  currency       String    @default("USD")
+  closeDate      DateTime? @map("close_date")
+  status         DealStatus @default(OPEN)
+  probability    Int?      @default(0)
+  riskScore      Int?      @map("risk_score")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  account        Account?      @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  contact        Contact?     @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  stage          PipelineStage? @relation(fields: [stageId], references: [id], onDelete: SetNull)
+
+  @@map("deals")
+}
+
+enum DealStatus {
+  OPEN
+  WON
+  LOST
+}
+
+model PipelineStage {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  name           String
+  order          Int      @default(0)
+  conversionRate Decimal? @db.Decimal(5, 2)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  deals        Deal[]
+
+  @@map("pipeline_stages")
+}
+
+// ============ INTEGRATIONS ============
+model CrmConnection {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  provider       String   // salesforce, hubspot, etc.
+  status         String   @default("pending")
+  lastSyncAt     DateTime? @map("last_sync_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("crm_connections")
+}
+
+model Integration {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  name           String
+  type           String   // marketing, sales, cs
+  status         String   @default("inactive")
+  config         Json?    @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("integrations")
+}
+
+// ============ PLAYBOOKS & AUTOMATION ============
+model Playbook {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  name           String
+  description    String?
+  type           String   // sales, onboarding, etc.
+  isActive       Boolean  @default(true) @map("is_active")
+  steps          Json?    @default("[]")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("playbooks")
+}
+
+// ============ FORECASTS ============
+model Forecast {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  period         String   // e.g. "2024-Q1"
+  type           String   // pipeline, revenue
+  value          Decimal  @db.Decimal(15, 2)
+  confidence     Decimal? @db.Decimal(5, 2)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("forecasts")
+}
+
+// ============ ACTIVITIES ============
+model Activity {
+  id             String   @id @default(cuid())
+  type           String   // email, call, meeting, task
+  subject        String?
+  description    String?
+  relatedType    String?  @map("related_type") // deal, lead, account
+  relatedId      String?  @map("related_id")
+  occurredAt     DateTime @map("occurred_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("activities")
+}
+
+// ============ ADMIN & COMPLIANCE ============
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  changes   Json?
+  ipAddress String?  @map("ip_address")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+model Setting {
+  id             String   @id @default(cuid())
+  organizationId String   @map("organization_id")
+  key            String
+  value          Json
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, key])
+  @@map("settings")
+}

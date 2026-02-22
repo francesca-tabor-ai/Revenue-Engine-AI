@@ -14,7 +14,13 @@ export default function Footer() {
             <h4>Product</h4>
             <Link to="/pricing">Pricing</Link>
             <Link to="/case-studies">Case Studies</Link>
+            <Link to="/api-docs">API Docs</Link>
             <a href="/#features">Features</a>
+          </div>
+          <div>
+            <h4>Developers</h4>
+            <Link to="/marketplace">App Marketplace</Link>
+            <Link to="/marketplace/build">Build an App</Link>
           </div>
           <div>
             <h4>Company</h4>
