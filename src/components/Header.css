@@ -90,6 +90,28 @@
 @media (max-width: 768px) {
   .nav {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 1rem 2rem;
+    background: rgba(17, 24, 39, 0.98);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+  .nav-open {
+    display: flex;
+  }
+  .nav a,
+  .nav button {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav a:last-of-type,
+  .nav .btn:last-of-type {
+    border-bottom: none;
   }
   .menu-toggle {
     display: flex;

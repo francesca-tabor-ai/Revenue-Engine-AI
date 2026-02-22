@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { AuthProvider } from './context/AuthContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -26,9 +27,21 @@ function RequireAuth({ children }) {
   return children
 }
 
+function ScrollToHash() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1))
+      el?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [pathname, hash])
+  return null
+}
+
 function App() {
   return (
     <AuthProvider>
+      <ScrollToHash />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
