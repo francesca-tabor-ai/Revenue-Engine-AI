@@ -12,6 +12,7 @@ export default function Header() {
         <Link to="/">Home</Link>
         <Link to="/pricing">Pricing</Link>
         <Link to="/case-studies">Case Studies</Link>
+        <Link to="/contact">Contact</Link>
         <Link to="/#demo" className="btn btn-outline">Request Demo</Link>
         <Link to="/pricing" className="btn btn-primary">Start Free Trial</Link>
       </nav>
