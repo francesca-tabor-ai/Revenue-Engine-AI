@@ -10,9 +10,13 @@ import CaseStudies from './pages/CaseStudies'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Onboarding from './pages/Onboarding'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminHome from './pages/admin/AdminHome'
 import AdminEntity from './pages/admin/AdminEntity'
+import DashboardLayout from './layouts/DashboardLayout'
+import DashboardHome from './pages/dashboard/DashboardHome'
+import PlaceholderPage from './pages/dashboard/PlaceholderPage'
 import ApiDocs from './pages/ApiDocs'
 import Marketplace from './pages/Marketplace'
 import MarketplaceAppDetail from './pages/MarketplaceAppDetail'
@@ -55,6 +59,25 @@ function App() {
         >
           <Route index element={<AdminHome />} />
           <Route path=":entity" element={<AdminEntity />} />
+        </Route>
+        <Route path="/onboarding" element={<RequireAuth><Onboarding /></RequireAuth>} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <DashboardLayout />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<DashboardHome />} />
+          <Route path="icp" element={<PlaceholderPage title="ICP & Offer Architect" description="Define your ideal customer profile, pain mapping, and beta offer. (Phase 3)" />} />
+          <Route path="outreach" element={<PlaceholderPage title="Outreach Generator" description="Generate LinkedIn & cold email messages at scale. (Phase 4)" />} />
+          <Route path="replies" element={<PlaceholderPage title="Reply Intelligence" description="Classify replies and get AI-powered response suggestions. (Phase 5)" />} />
+          <Route path="revenue" element={<PlaceholderPage title="Revenue Dashboard" description="Track outreach volume, reply rate, calls, and revenue. (Phase 6)" />} />
+          <Route path="sprint" element={<PlaceholderPage title="Revenue Sprint" description="14-day structured execution plan. (Phase 7)" />} />
+          <Route path="authority" element={<PlaceholderPage title="Authority Builder" description="Generate LinkedIn posts and thought leadership content. (Phase 8)" />} />
+          <Route path="templates" element={<PlaceholderPage title="Campaign Templates" description="Pre-built outreach sequences. (Phase 9)" />} />
+          <Route path="behaviour" element={<PlaceholderPage title="Behaviour Monitor" description="Track execution consistency and gentle nudges. (Phase 10)" />} />
         </Route>
         <Route
           path="/*"

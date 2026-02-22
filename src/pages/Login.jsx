@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { getOnboardingComplete } from './Onboarding'
 import './Auth.css'
 
 export default function Login() {
@@ -25,7 +26,8 @@ export default function Login() {
       if (!res.ok) throw new Error(data.error || 'Login failed')
       login(data.user, data.token)
       if (data.user.role === 'ADMIN') navigate('/admin')
-      else navigate('/')
+      else if (!getOnboardingComplete(data.user.id)) navigate('/onboarding')
+      else navigate('/dashboard')
     } catch (err) {
       setError(err.message)
     } finally {

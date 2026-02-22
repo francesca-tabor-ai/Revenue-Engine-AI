@@ -19,7 +19,7 @@ export default function Header() {
         <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
         {user ? (
           <>
-            {isAdmin && <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>}
+            {isAdmin ? <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link> : <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>}
             <button onClick={() => { logout(); setMenuOpen(false); }} className="btn btn-outline">Log out</button>
           </>
         ) : (
