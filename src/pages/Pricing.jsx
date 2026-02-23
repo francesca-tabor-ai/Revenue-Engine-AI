@@ -171,7 +171,7 @@ export default function Pricing() {
               ))}
             </ul>
             <Link
-              to={tier.id === 'enterprise' ? '/#demo' : '/pricing'}
+              to={tier.id === 'enterprise' ? '/contact' : '/signup'}
               className={`btn ${tier.highlighted ? 'btn-primary' : 'btn-outline'}`}
             >
               {tier.cta}

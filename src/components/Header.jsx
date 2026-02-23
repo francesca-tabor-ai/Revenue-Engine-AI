@@ -29,7 +29,6 @@ export default function Header() {
           </>
         )}
         <Link to="/#demo" className="btn btn-outline" onClick={() => setMenuOpen(false)}>Request Demo</Link>
-        <Link to="/pricing" className="btn btn-primary" onClick={() => setMenuOpen(false)}>Start Free Trial</Link>
       </nav>
       <button className="menu-toggle" aria-label={menuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMenuOpen((o) => !o)} aria-expanded={menuOpen}>
         <span></span><span></span><span></span>
